@@ -1,4 +1,4 @@
-# Detailing Reservation API - QA Case Study
+# Detailing Reservation API - QA
 
 This repository is a **sanitized, production-inspired excerpt** of a real
 vehicle-detailing reservation system. It is intentionally small enough to review
