@@ -83,16 +83,6 @@ The Python suite refuses to run against a remote host unless
 `QA_ALLOW_REMOTE=true` is explicitly set. This guard prevents accidental test
 data creation in production.
 
-## Suggested 10-minute interview walkthrough
-
-1. Start with `docs/TEST_STRATEGY.md` and explain the risk model.
-2. Show `src/reservations/reservation-domain.ts` as the testable production
-   boundary.
-3. Open `test/unit/reservation-domain.spec.ts` for pricing and calendar edges.
-4. Open `test/e2e/api.e2e-spec.ts` for validation, conflicts, and state changes.
-5. Show `qa/tests/` to demonstrate technology-independent black-box coverage.
-6. Finish with `docs/BUG_REPORT.md` and the regression test that should follow it.
-
 ## Deliberate limitations
 
 - Persistence is in memory and resets after restart.
