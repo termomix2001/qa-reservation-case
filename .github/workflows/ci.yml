@@ -1,0 +1,52 @@
+name: qa-case-study-ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build API
+        run: npm run build
+
+      - name: Run TypeScript tests
+        run: npm run test:coverage
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: qa/requirements.txt
+
+      - name: Install Python dependencies
+        run: python -m pip install -r qa/requirements.txt
+
+      - name: Start API
+        run: |
+          npm start > api.log 2>&1 &
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3100/api/health > /dev/null; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat api.log
+          exit 1
+
+      - name: Run black-box API tests
+        working-directory: qa
+        run: pytest -v

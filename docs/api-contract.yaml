@@ -1,0 +1,184 @@
+openapi: 3.0.3
+info:
+  title: Detailing Reservation QA Case Study
+  version: 1.0.0
+  description: An anonymized reservation API excerpt for test automation review.
+servers:
+  - url: http://127.0.0.1:3100/api
+paths:
+  /health:
+    get:
+      summary: Readiness check
+      responses:
+        "200":
+          description: API is ready
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Health"
+  /services:
+    get:
+      summary: List service definitions
+      responses:
+        "200":
+          description: Service catalog
+  /reservations/quote:
+    post:
+      summary: Calculate a quote without creating a reservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuoteRequest"
+      responses:
+        "200":
+          description: Quote breakdown
+        "400":
+          description: Invalid service selection
+  /reservations:
+    get:
+      summary: List reservations in the demo store
+      responses:
+        "200":
+          description: Reservation list
+    post:
+      summary: Create a reservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateReservation"
+      responses:
+        "201":
+          description: Reservation created
+        "400":
+          description: Validation or business rule failure
+        "409":
+          description: Reservation interval overlaps an active reservation
+  /reservations/{id}:
+    get:
+      summary: Read one reservation
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Reservation found
+        "404":
+          description: Reservation not found
+  /reservations/{id}/status:
+    patch:
+      summary: Change reservation status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [status]
+              properties:
+                status:
+                  $ref: "#/components/schemas/ReservationStatus"
+      responses:
+        "200":
+          description: Status changed
+        "400":
+          description: Illegal state transition
+        "404":
+          description: Reservation not found
+components:
+  schemas:
+    Health:
+      type: object
+      additionalProperties: false
+      required: [ok, service, time]
+      properties:
+        ok:
+          type: boolean
+          enum: [true]
+        service:
+          type: string
+          enum: [reservation-qa-showcase]
+        time:
+          type: string
+          format: date-time
+    VehicleType:
+      type: string
+      enum: [standard, suv, seven-seater, van]
+    Dirtiness:
+      type: string
+      enum: [normal, heavy, extreme]
+    ReservationStatus:
+      type: string
+      enum: [new, confirmed, received, in-progress, ready-for-handover, delivered, cancelled, no-show]
+    QuoteVehicle:
+      type: object
+      additionalProperties: false
+      required: [vehicleType, dirtiness, serviceIds]
+      properties:
+        vehicleType:
+          $ref: "#/components/schemas/VehicleType"
+        dirtiness:
+          $ref: "#/components/schemas/Dirtiness"
+        serviceIds:
+          type: array
+          minItems: 1
+          uniqueItems: true
+          items:
+            type: string
+    QuoteRequest:
+      type: object
+      additionalProperties: false
+      required: [vehicles]
+      properties:
+        pickupRequested:
+          type: boolean
+          default: false
+        vehicles:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/QuoteVehicle"
+    CreateReservation:
+      type: object
+      additionalProperties: false
+      required: [customer, startDate, startTime, vehicles]
+      properties:
+        customer:
+          type: object
+          additionalProperties: false
+          required: [name, email, phone]
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+        pickupRequested:
+          type: boolean
+          default: false
+        startDate:
+          type: string
+          format: date
+        startTime:
+          type: string
+          pattern: "^([01]\\d|2[0-3]):(?:00|30)$"
+        vehicles:
+          type: array
+          minItems: 1
+          items:
+            $ref: "#/components/schemas/QuoteVehicle"

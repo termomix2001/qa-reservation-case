@@ -1,0 +1,37 @@
+{
+  "name": "detailing-reservation-qa-case-study",
+  "version": "1.0.0",
+  "private": true,
+  "description": "An anonymized reservation API excerpt with a QA automation portfolio.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "start": "node dist/main.js",
+    "start:dev": "nest start --watch",
+    "test": "vitest run",
+    "test:unit": "vitest run test/unit",
+    "test:e2e": "vitest run test/e2e",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/platform-express": "^11.1.6",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.10",
+    "@nestjs/testing": "^11.1.6",
+    "@types/node": "^22.18.6",
+    "@types/supertest": "^6.0.3",
+    "@vitest/coverage-v8": "5.0.3",
+    "supertest": "^7.1.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2",
+    "vite": "8.3.3",
+    "vitest": "5.0.3"
+  }
+}
