@@ -63,7 +63,8 @@ workflow. This suite can later target an isolated deployed environment by changi
 - All unit and E2E tests pass.
 - Python contract and workflow tests pass against a fresh API process.
 - No secrets or production identifiers are present in the repository.
-- Coverage thresholds pass when running `npm run test:coverage`.
+- Coverage thresholds defined in `vitest.config.mjs` pass when running
+  `npm run test:coverage`.
 
 ## Residual risks and next tests
 

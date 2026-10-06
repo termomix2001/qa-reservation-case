@@ -72,5 +72,4 @@ py -3.13 -m venv .venv
 - Python testy přistupují k systému jako externí klient a neznají jeho vnitřní
   implementaci.
 
-Podrobnější anglické informace jsou v `README.md`. Vlastní poznámky k prezentaci
-jsou v `docs/INTERVIEW_NOTES_CS.md`.
+Podrobnější anglické informace jsou v `README.md`.
